@@ -27,7 +27,7 @@ define(function(require, exports, module) {
 define(function(require, exports, module) {
     'use strict';
     
-    var Parser = require("parser");
+    var Parser = require("famous-ui-kit/parser");
     
     var Engine, ImageSurface, StateModifier;
     

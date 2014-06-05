@@ -11,7 +11,11 @@ Famous imports:
 
 <script type="text/javascript" src="lib/requirejs/require.js" data-main="src/requireConfig"></script>
 */
-(function(win, doc) {
+define(function(require, exports, module) {
+    'use strict';
+    
+    var win = window;
+    var doc = document;
     
     /* 
      * Helpers 
@@ -82,7 +86,8 @@ Famous imports:
             "lib/requirejs/require.js",
             "lib/famous-polyfills/functionPrototypeBind.js",
             "lib/famous-polyfills/classList.js",
-            "lib/famous-polyfills/requestAnimationFrame.js"
+            "lib/famous-polyfills/requestAnimationFrame.js",
+            "lib/famous-ui-kit/main.js"
         ];
         this.css = [
             "lib/famous/core/famous.css",
@@ -95,17 +100,18 @@ Famous imports:
         
         var scriptTemplate = doc.createElement("script");
             scriptTemplate.type = "text/javascript";
+        
+        // requireConfig
+//        var requireConfig = scriptTemplate.cloneNode();
+//        requireConfig.src = "lib/requirejs/require.js";
+//        requireConfig.dataset.main = "src/requireConfig";
+//        docHead.appendChild(requireConfig);
+        
         for (var i=0, l=this.scripts.length; i<l; ++i) {
             var el = scriptTemplate.cloneNode();
             el.src = this.scripts[i];
             docHead.appendChild(el);
         }
-        
-        // requireConfig
-        var requireConfig = scriptTemplate.cloneNode();
-        requireConfig.src = "lib/requirejs/require.js";
-        requireConfig.dataset.main = "src/requireConfig";
-        docHead.appendChild(requireConfig);
                                 
         var cssTemplate = doc.createElement("link");
             cssTemplate.rel = "stylesheet";
@@ -119,7 +125,7 @@ Famous imports:
     
     /* Main */
     var resLoader = new ResourceLoader();
-    resLoader.load();
+//    resLoader.load();
     
     
     /* Global exports */
@@ -130,4 +136,4 @@ Famous imports:
         attr: attr
     };
     
-})(window, document);
+});

@@ -4,11 +4,13 @@ define(function(require, exports, module) {
     
     var Scrollview = function() {
         FamScrollview.apply(this, arguments);
-        console.log(this);
+        
+        this.direction = this.options.direction;
+        
         this.surfaces = [];
         this.sequenceFrom(this.surfaces);
         
-        this.addHeightUpdater();
+        this.addSizeUpdater();
     };
     
     Scrollview.prototype = Object.create(FamScrollview.prototype);
@@ -18,7 +20,7 @@ define(function(require, exports, module) {
         this.surfaces.push(el);
     };
     
-    Scrollview.prototype.addHeightUpdater = function() {
+    Scrollview.prototype.addSizeUpdater = function() {
         var _this = this;
         
         var heightUpdater = function() {
@@ -27,14 +29,27 @@ define(function(require, exports, module) {
                 var surfaceSize = surface.getSize();
                 var surfaceW = surfaceSize[0];
                 var surfaceH = surfaceSize[1];
-                var sizeH = surface._currTarget.offsetHeight;
+                
+                if (_this.direction == 0) {
+                    var sizeW = surface._currTarget.offsetWidth;
 
-                if (surfaceH != null && sizeH < surfaceH) sizeH = surfaceH;
-                surface.setOptions({
-                    size: [surfaceW, sizeH]
-                });
+                    if (surfaceW != null && sizeW < surfaceW) sizeW = surfaceW;
+                    surface.setOptions({
+                        size: [sizeW, surfaceH]
+                    });
 
-                _this.sync.removeListener('start', heightUpdater);
+                    _this.sync.removeListener('start', heightUpdater);
+                }
+                else {
+                    var sizeH = surface._currTarget.offsetHeight;
+
+                    if (surfaceH != null && sizeH < surfaceH) sizeH = surfaceH;
+                    surface.setOptions({
+                        size: [surfaceW, sizeH]
+                    });
+
+                    _this.sync.removeListener('start', heightUpdater);
+                }
             };
         };
         

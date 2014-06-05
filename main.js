@@ -1,14 +1,18 @@
 define(function(require, exports, module) {
     'use strict';
     
-    var FamousContext = require("famous-context");
+    require("famous-ui-kit/helpers");
+    var FamousContext = require("famous-ui-kit/famous-context");
     
     var win = window;
     var doc = document;
     var body = doc.getElementsByTagName("body")[0];
     
     if (win["fui"] == undefined) win["fui"] = {};
-    fui.elements = {};
+    fui.element = {};  // for ids
+    fui.elements = {}; // for classes
+    
+    if (win.onFamousUILibLoaded) win.onFamousUILibLoaded();
     
     var timerStart = new Date().getTime();
     
@@ -19,4 +23,7 @@ define(function(require, exports, module) {
     
     var timerEnd = new Date().getTime();
     console.log("Parsed in " + (timerEnd - timerStart) + "ms");
+    
+    if (win.onUIReady) win.onUIReady();
+    
 });

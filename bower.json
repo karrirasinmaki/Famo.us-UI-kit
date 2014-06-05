@@ -1,32 +1,21 @@
 {
   "name": "famous-ui-kit",
-  "description": "UI library that enables you to create Famo.us layouts with writing HTML.",
-  "version": "0.1.0",
-  "homepage": "https://github.com/karrirasinmaki/famous-ui-kit",
-  "authors": [{
-    "name": "karrirasinmaki",
-    "url": "http://github.com/karrirasinmaki/"
-  }],
-  "main": "app/index.html",
+  "version": "0.1.1",
+  "authors": [
+    "karrirasinmaki <karri.rasinmaki@gmail.com>"
+  ],
+  "description": "Build Famo.us layouts with HTML",
+  "main": "main.js",
   "moduleType": [
     "amd"
   ],
   "keywords": [
+    "famous",
+    "html",
+    "framework",
+    "ui",
+    "library",
     "famo.us"
   ],
-  "license": "ISC",
-  "private": true,
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "src/lib",
-    "test",
-    "tests"
-  ],
-  "dependencies": {
-    "requirejs": "~2.1.11",
-    "almond": "~0.2.9",
-    "famous-polyfills": "git+https://github.com/Famous/polyfills.git#0.1.1",
-    "famous": "git+https://github.com/Famous/famous.git#0.1.2"
-  }
+  "license": "MIT"
 }

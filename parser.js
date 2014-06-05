@@ -36,6 +36,13 @@ define(function(require, exports, module) {
 
     var Parser = {};
     
+    Parser.extendedDependencies = {};
+    
+    win.fui.addElement = function(tagName, famElClass) {
+        Parser.extendedDependencies[tagName] = famElClass;
+        console.log(Parser);
+    };
+    
     var getParentSize = function(parent) {
         var size;
         if (parent != undefined) {
@@ -119,7 +126,7 @@ define(function(require, exports, module) {
                 case "ContainerSurface":
                     return require("famous/surfaces/ContainerSurface");
                 case "Scrollview":
-                    return require("extended-famous/Scrollview");
+                    return require("famous-ui-kit/extended-famous/Scrollview");
                 case "ImageSurface":
                     return require("famous/surfaces/ImageSurface");
                 case "Surface":
@@ -127,9 +134,22 @@ define(function(require, exports, module) {
                 case "Modifier":
                     return require("famous/core/Modifier");
                 case "Grid":
-                    return require("extended-famous/Grid");
+                    return require("famous-ui-kit/extended-famous/Grid");
+                default:
+                    return Parser.extendedDependencies[name];
             }
         })();
+    };
+    
+    Parser.addFamElToElementLists = function(htmlEl, famEl) {
+        if (htmlEl.id) fui.element[htmlEl.id] = famEl;
+        if (htmlEl.className) {
+            for (var i=0, l=htmlEl.classList.length; i<l; ++i) {
+                var className = htmlEl.classList[i];
+                if (!fui.elements[className]) fui.elements[className] = [];
+                fui.elements[className].push(famEl);
+            }
+        }
     };
     
     Parser.parse = function(htmlContainer, famousContainer, grandParent) {
@@ -145,7 +165,7 @@ define(function(require, exports, module) {
                 continue;
             }
             
-            if (child.id) fui.elements[child.id] = famEl;
+            Parser.addFamElToElementLists(child, famEl);
             
             if (parent != undefined) parent = parent.add(famEl);
             else famousContainer.add(famEl);
@@ -164,6 +184,7 @@ define(function(require, exports, module) {
     
     Parser.convertToFamousElement = function(el, parent) {
         var objectName = fui.dashToUpperCamelCase(el.tagName);
+        
         var size = sizeArrAttr(el, parent);
         var origin = originArrAttr(el, parent, size);
         var dimensions = arrAttr(el, "cols", "rows");
@@ -173,8 +194,6 @@ define(function(require, exports, module) {
         var properties = attr(el, "properties");
         
         Parser.getDependency(objectName);
-        
-        console.log(size);
         
         var options = {};
         if (size) options.size = size;
@@ -197,8 +216,9 @@ define(function(require, exports, module) {
             properties = out;
             options.properties = properties;
         }
-        
-        var famEl = new this[objectName](options);        
+        console.log(this);
+        var famEl = new this[objectName](options);
+        famEl.dataset = el.dataset;
         return famEl;
     };
     
