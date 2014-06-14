@@ -1,30 +1,3 @@
-/*globals define*/
-/*
-define(function(require, exports, module) {
-    'use strict';
-    // import dependencies
-    var Engine = require('famous/core/Engine');
-    var ImageSurface = require('famous/surfaces/ImageSurface');
-    var StateModifier = require('famous/modifiers/StateModifier');
-
-    // create the main context
-    var mainContext = Engine.createContext();
-
-    // your app here
-    var logo = new ImageSurface({
-        size: [200, 200],
-        content: '/content/images/famous_logo.png'
-    });
-
-    var logoModifier = new StateModifier({
-        origin: [0.5, 0.5]
-    });
-
-    mainContext.add(logoModifier).add(logo);
-});
-*/
-
-
 define(function(require, exports, module) {
     'use strict';
     
@@ -46,10 +19,15 @@ define(function(require, exports, module) {
     var getParentSize = function(parent) {
         var size;
         if (parent != undefined) {
-            if (parent.getSize) size = parent.getSize();
+            size = parent.size;
         }
         if (size == undefined) {
-            size = [win.innerHeight, win.innerWidth];
+            if (parent._currTarget) {
+                size = [parent._currTarget.offsetHeight, parent._currTarget.offsetWidth];
+            }
+            else {
+                size = [win.innerHeight, win.innerWidth];
+            }
         }
         
         return size;
@@ -90,7 +68,6 @@ define(function(require, exports, module) {
             if (arr[0] != 0) arr[0] = arr[0] / (parentSize[0] - size[0]);
             if (arr[1] != 0) arr[1] = arr[1] / (parentSize[1] - size[1]);
         }
-        console.log(arr);
         return arr;        
     };
     
@@ -102,7 +79,6 @@ define(function(require, exports, module) {
             
             var ws = arr[0].replace(/%/g, "*" + size[0]/100);
             var hs = arr[1].replace(/%/g, "*" + size[1]/100);
-            console.log(ws, hs, size);
             return [eval(ws), eval(hs)];
         }
     };
@@ -216,7 +192,6 @@ define(function(require, exports, module) {
             properties = out;
             options.properties = properties;
         }
-        console.log(this);
         var famEl = new this[objectName](options);
         famEl.dataset = el.dataset;
         return famEl;
