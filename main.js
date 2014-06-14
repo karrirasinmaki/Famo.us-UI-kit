@@ -14,16 +14,21 @@ define(function(require, exports, module) {
     
     if (win.onFamousUILibLoaded) win.onFamousUILibLoaded();
     
-    var timerStart = new Date().getTime();
-    
-    var contexts = body.getElementsByTagName("famous-context");
-    for (var i=0, l=contexts.length; i<l; ++i) {
-        new FamousContext(contexts[i]);
+    var fuiParse = function() {
+        var timerStart = new Date().getTime();
+
+        var contexts = body.getElementsByTagName("famous-context");
+        for (var i=0, l=contexts.length; i<l; ++i) {
+            new FamousContext(contexts[i]);
+        }
+
+        var timerEnd = new Date().getTime();
+        console.log("Parsed in " + (timerEnd - timerStart) + "ms");
+
+        if (win.onUIReady) win.onUIReady();
     }
     
-    var timerEnd = new Date().getTime();
-    console.log("Parsed in " + (timerEnd - timerStart) + "ms");
-    
-    if (win.onUIReady) win.onUIReady();
+    module.exports = fuiParse;
+    win["fuiParse"] = fuiParse;
     
 });
